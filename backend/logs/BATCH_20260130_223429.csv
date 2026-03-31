@@ -1,0 +1,6 @@
+Timestamp,Step_Number,Step_Name,Temperature_C,Pressure_Bar,Cl2_Flow_Pct,Cooling_Pct,Agitator_RPM,Purity_Pct,Moles_DCP,Financial_Value,Recipe_Status,Safety_Scram,Interlock_Active
+2026-01-30T22:34:31.121045,1,Load Phenol,57.05,1.17,0,100,100.0,100.0,0.0,-100.0,Load Phenol (Step 1/8) - 28s left,False,False
+2026-01-30T22:34:41.139616,1,Load Phenol,15.0,0.75,0,20,100.0,100.0,0.0,-100.0,Load Phenol (Step 1/8) - 18s left,False,False
+2026-01-30T22:34:51.257322,1,Load Phenol,15.0,0.75,0,20,100.0,100.0,0.0,-100.0,Load Phenol (Step 1/8) - 8s left,False,False
+2026-01-30T22:35:01.299073,2,Add Chlorobenzene,15.0,0.75,0,20,100.0,100.0,0.0,-100.0,Add Chlorobenzene (Step 2/8) - 43s left,False,False
+2026-01-30T22:35:11.358392,2,Add Chlorobenzene,15.0,0.75,0,20,100.0,100.0,0.0,-100.0,Add Chlorobenzene (Step 2/8) - 33s left,False,False

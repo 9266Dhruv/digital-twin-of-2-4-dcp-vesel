@@ -1,0 +1,20 @@
+Timestamp,Step_Number,Step_Name,Temperature_C,Pressure_Bar,Cl2_Flow_Pct,Cooling_Pct,Agitator_RPM,Purity_Pct,Moles_DCP,Financial_Value,Recipe_Status,Safety_Scram,Interlock_Active
+2026-02-10T22:16:02.727364,1,Load Phenol,15.0,0.75,0,41.8,100.0,100.0,0.0,-100.0,Load Phenol (Step 1/8) - 22s left,False,False
+2026-02-10T22:16:12.823237,1,Load Phenol,15.0,0.75,0,20,100.0,100.0,0.0,-100.0,Load Phenol (Step 1/8) - 12s left,False,False
+2026-02-10T22:16:22.875626,1,Load Phenol,15.0,0.75,0,20,100.0,100.0,0.0,-100.0,Load Phenol (Step 1/8) - 2s left,False,False
+2026-02-10T22:16:32.951251,2,Add Chlorobenzene,15.0,0.75,0,20,100.0,100.0,0.0,-100.0,Add Chlorobenzene (Step 2/8) - 37s left,False,False
+2026-02-10T22:16:42.968157,2,Add Chlorobenzene,15.0,0.75,0,20,100.0,100.0,0.0,-100.0,Add Chlorobenzene (Step 2/8) - 27s left,False,False
+2026-02-10T22:16:53.051652,2,Add Chlorobenzene,15.0,0.75,0,20,100.0,100.0,0.0,-100.0,Add Chlorobenzene (Step 2/8) - 17s left,False,False
+2026-02-10T22:17:03.124067,2,Add Chlorobenzene,15.0,0.75,0,20,269.0,100.0,0.0,-100.0,Add Chlorobenzene (Step 2/8) - 7s left,False,False
+2026-02-10T22:17:13.135153,3,Heat to 75°C,47.5,1.07,0,20,269.0,100.0,0.0,-100.0,Heat to 75°C (Step 3/8) - 117s left,False,False
+2026-02-10T22:17:23.138289,3,Heat to 75°C,98.62,1.59,0,100,269.0,71.7,0.0,-100.0,Heat to 75°C (Step 3/8) - 107s left,False,False
+2026-02-10T22:17:33.220412,3,Heat to 75°C,103.8,1.64,0,100,269.0,70.0,0.0,-100.0,Heat to 75°C (Step 3/8) - 97s left,False,False
+2026-02-10T22:17:43.324154,3,Heat to 75°C,105.27,1.65,0,100,269.0,70.0,0.0,-100.0,Heat to 75°C (Step 3/8) - 87s left,False,False
+2026-02-10T22:17:53.404283,3,Heat to 75°C,105.67,1.66,0,100,269.0,70.0,0.0,-100.0,Heat to 75°C (Step 3/8) - 77s left,False,False
+2026-02-10T22:18:03.407148,3,Heat to 75°C,105.79,1.66,0,100,269.0,70.0,0.0,-100.0,Heat to 75°C (Step 3/8) - 67s left,False,False
+2026-02-10T22:18:13.493107,3,Heat to 75°C,105.82,1.66,0,100,269.0,70.0,0.0,-100.0,Heat to 75°C (Step 3/8) - 57s left,False,False
+2026-02-10T22:18:23.525204,3,Heat to 75°C,105.83,1.66,0,100,269.0,70.0,0.0,-100.0,Heat to 75°C (Step 3/8) - 47s left,False,False
+2026-02-10T22:18:33.554933,3,Heat to 75°C,105.83,1.66,0,100,269.0,70.0,0.0,-100.0,Heat to 75°C (Step 3/8) - 37s left,False,False
+2026-02-10T22:18:43.590394,3,Heat to 75°C,110.6,1.71,0,100,269.0,70.0,0.0,-100.0,Heat to 75°C (Step 3/8) - 27s left,False,False
+2026-02-10T22:18:53.640558,3,Heat to 75°C,107.14,1.67,0,100,269.0,70.0,0.0,-100.0,Heat to 75°C (Step 3/8) - 17s left,False,False
+2026-02-10T22:19:03.758463,3,Heat to 75°C,120.0,1.8,0,100,269.0,70.0,0.0,-100.0,Heat to 75°C (Step 3/8) - 6s left,False,False

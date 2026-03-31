@@ -1,0 +1,56 @@
+{
+  "batch_id": "BATCH-20260331-215707-C4541B",
+  "product": "2,4-Dichlorophenol",
+  "cas_number": "120-83-2",
+  "vessel_id": "R-101",
+  "batch_start": "2026-03-31T21:57:07.980319",
+  "batch_end": "2026-03-31T21:57:21.053849",
+  "operator_id": "system",
+  "phases": [
+    {
+      "phase_name": "Load Phenol",
+      "start_time": "2026-03-31T21:57:07.989867",
+      "end_time": "2026-03-31T21:57:21.053849",
+      "duration_seconds": 13.063982,
+      "parameters": {
+        "target_temp": 25.0,
+        "duration_seconds": 30,
+        "cl2_required": false,
+        "min_agitator_rpm": 0
+      },
+      "actual_values": {
+        "temperature": {
+          "min": 15.0,
+          "max": 72.04,
+          "avg": 32.48
+        },
+        "pressure": {
+          "min": 0.75,
+          "max": 1.32,
+          "avg": 0.92
+        }
+      },
+      "deviations": [],
+      "operator_id": "system",
+      "completed": true
+    }
+  ],
+  "material_balance": {
+    "phenol_charged_kg": 1.0,
+    "cl2_consumed_kg": 0.0,
+    "dcp_produced_kg": 0.0,
+    "yield_pct": 0.0,
+    "tcp_waste_kg": 0.0
+  },
+  "quality_summary": {
+    "avg_purity": 0.0,
+    "min_purity": 100.0,
+    "max_tcp_impurity": 0.0,
+    "final_selectivity": 0.0,
+    "temp_excursions_count": 10
+  },
+  "alarm_summary": [],
+  "scram_events": [],
+  "record_hash": "e644cc6fe060058dacb17c729283a50dccb0d87bedf6c55a4daf92380e0f0918",
+  "previous_hash": "b68e82269f6f5cf21c18127b9c00309a8a18f33b9e3e253cb6486db373709bbb"
+}
