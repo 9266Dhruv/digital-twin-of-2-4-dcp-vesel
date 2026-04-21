@@ -1,0 +1,2 @@
+Timestamp,Step_Number,Step_Name,Temperature_C,Pressure_Bar,Cl2_Flow_Pct,Cooling_Pct,Agitator_RPM,Purity_Pct,Moles_DCP,Financial_Value,Recipe_Status,Safety_Scram,Interlock_Active
+2026-04-01T12:46:03.034779,1,Load Phenol,41.0,1.01,0,100,100.0,0.0,0.0,-100.0,Load Phenol (Step 1/8) - 26s left,False,False

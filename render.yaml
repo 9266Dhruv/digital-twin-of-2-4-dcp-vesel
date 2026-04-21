@@ -1,0 +1,30 @@
+services:
+  # Backend - Python FastAPI Web Service
+  - type: web
+    name: dcp-twin-backend
+    runtime: python
+    region: oregon
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: AUTH_ENABLED
+        value: "true"
+      - key: OPCUA_ENABLED
+        value: "false"
+      - key: PYTHON_VERSION
+        value: "3.11.0"
+    plan: free
+
+  # Frontend - React Static Site
+  - type: web
+    name: dcp-twin-frontend
+    runtime: static
+    region: oregon
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://dcp-twin-backend.onrender.com
+    plan: free

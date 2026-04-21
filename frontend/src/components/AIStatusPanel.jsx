@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Activity, BrainCircuit, PlayCircle, X } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 export const AIStatusPanel = ({ analysis, onRunSim }) => {
     const [simResults, setSimResults] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -10,7 +12,7 @@ export const AIStatusPanel = ({ analysis, onRunSim }) => {
         setLoading(true);
         try {
             // In real app, this is an API call
-            const res = await fetch('http://localhost:8000/api/simulate-future', {
+            const res = await fetch(`${API_URL}/api/simulate-future`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ hours: 4 })

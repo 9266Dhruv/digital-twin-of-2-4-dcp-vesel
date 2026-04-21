@@ -6,6 +6,8 @@ import {
     Activity, Zap, Wind
 } from 'lucide-react';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 // Format seconds to MM:SS or HH:MM:SS
 const formatTime = (seconds) => {
     if (!seconds || seconds < 0) return '00:00';
@@ -330,8 +332,8 @@ export const BatchReportPanel = ({ telemetry, onCommand }) => {
             if (token) headers['Authorization'] = `Bearer ${token}`;
 
             const url = format === 'pdf'
-                ? 'http://localhost:8000/api/batch/report/pdf'
-                : 'http://localhost:8000/api/batch/report/docx';
+                ? `${API_URL}/api/batch/report/pdf`
+                : `${API_URL}/api/batch/report/docx`;
 
             const response = await fetch(url, { headers });
             if (response.ok) {

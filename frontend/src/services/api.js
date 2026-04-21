@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 
-const WS_BASE = 'ws://localhost:8000/ws';
-const API_URL = 'http://localhost:8000';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const WS_BASE = API_URL.replace(/^http/, 'ws') + '/ws';
 
 /** Get stored JWT token */
 const getToken = () => localStorage.getItem('dcp_token') || '';

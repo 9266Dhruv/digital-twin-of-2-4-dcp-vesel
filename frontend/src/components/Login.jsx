@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { User, KeyRound, Eye, EyeOff, Shield, Loader2 } from 'lucide-react';
 import Dither from './Dither';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 export const LoginPage = ({ onLogin }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -16,7 +18,7 @@ export const LoginPage = ({ onLogin }) => {
         setIsLoading(true);
 
         try {
-            const response = await fetch('http://localhost:8000/api/auth/login', {
+            const response = await fetch(`${API_URL}/api/auth/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password }),
