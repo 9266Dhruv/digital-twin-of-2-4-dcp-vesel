@@ -1,0 +1,110 @@
+{
+  "batch_id": "BATCH-20260502-115303-35631B",
+  "product": "2,4-Dichlorophenol",
+  "cas_number": "120-83-2",
+  "vessel_id": "R-101",
+  "batch_start": "2026-05-02T11:53:03.572622",
+  "batch_end": "2026-05-02T11:55:21.912331",
+  "operator_id": "system",
+  "phases": [
+    {
+      "phase_name": "Load Phenol",
+      "start_time": "2026-05-02T11:53:03.591215",
+      "end_time": "2026-05-02T11:53:33.514731",
+      "duration_seconds": 29.923516,
+      "parameters": {
+        "target_temp": 25.0,
+        "duration_seconds": 30,
+        "cl2_required": false,
+        "min_agitator_rpm": 0
+      },
+      "actual_values": {
+        "temperature": {
+          "min": 15.0,
+          "max": 65.0,
+          "avg": 21.06
+        },
+        "pressure": {
+          "min": 0.75,
+          "max": 1.25,
+          "avg": 0.81
+        }
+      },
+      "deviations": [],
+      "operator_id": "system",
+      "completed": true
+    },
+    {
+      "phase_name": "Add Chlorobenzene",
+      "start_time": "2026-05-02T11:53:33.514731",
+      "end_time": "2026-05-02T11:54:18.532978",
+      "duration_seconds": 45.018247,
+      "parameters": {
+        "target_temp": 25.0,
+        "duration_seconds": 45,
+        "cl2_required": false,
+        "min_agitator_rpm": 0
+      },
+      "actual_values": {
+        "temperature": {
+          "min": 15.0,
+          "max": 15.0,
+          "avg": 15.0
+        },
+        "pressure": {
+          "min": 0.75,
+          "max": 0.75,
+          "avg": 0.75
+        }
+      },
+      "deviations": [],
+      "operator_id": "system",
+      "completed": true
+    },
+    {
+      "phase_name": "Heat to 75\u00b0C",
+      "start_time": "2026-05-02T11:54:18.532978",
+      "end_time": "2026-05-02T11:55:21.912331",
+      "duration_seconds": 63.379353,
+      "parameters": {
+        "target_temp": 75.0,
+        "duration_seconds": 120,
+        "cl2_required": false,
+        "min_agitator_rpm": 0
+      },
+      "actual_values": {
+        "temperature": {
+          "min": 21.5,
+          "max": 120.0,
+          "avg": 95.74
+        },
+        "pressure": {
+          "min": 0.82,
+          "max": 1.8,
+          "avg": 1.56
+        }
+      },
+      "deviations": [],
+      "operator_id": "system",
+      "completed": true
+    }
+  ],
+  "material_balance": {
+    "phenol_charged_kg": 1.0,
+    "cl2_consumed_kg": 0.0,
+    "dcp_produced_kg": 0.0,
+    "yield_pct": 0.0,
+    "tcp_waste_kg": 0.0
+  },
+  "quality_summary": {
+    "avg_purity": 0.0,
+    "min_purity": 100.0,
+    "max_tcp_impurity": 0.0,
+    "final_selectivity": 0.0,
+    "temp_excursions_count": 115
+  },
+  "alarm_summary": [],
+  "scram_events": [],
+  "record_hash": "a469c19358d8228995baaf9b64b712be523ce5b1d73644b823966659c7ea36ba",
+  "previous_hash": "6de11542d20d893502ee9490d5a386a3a61dcc264b33132d7e86fe0a2b919a27"
+}

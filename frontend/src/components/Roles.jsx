@@ -24,8 +24,19 @@ export const WorkerView = ({ telemetry, onCommand }) => {
     const [discharge, setDischarge] = useState(0);
     const [hr, setHr] = useState(75);
 
-    // Sync local state with telemetry when it updates (only if values changed)
+    // Debounce: suppress telemetry sync while user is interacting
+    const userInteracting = React.useRef(false);
+    const interactTimer = React.useRef(null);
+
+    const markInteracting = () => {
+        userInteracting.current = true;
+        if (interactTimer.current) clearTimeout(interactTimer.current);
+        interactTimer.current = setTimeout(() => { userInteracting.current = false; }, 2000);
+    };
+
+    // Sync local state with telemetry when it updates (only if NOT actively interacting)
     React.useEffect(() => {
+        if (userInteracting.current) return; // Skip sync while user is dragging
         if (telemetry?.inputs) {
             if (telemetry.inputs.cl2 !== undefined && telemetry.inputs.cl2 !== cl2) setCl2(telemetry.inputs.cl2);
             if (telemetry.inputs.rpm !== undefined && telemetry.inputs.rpm !== rpm) setRpm(telemetry.inputs.rpm);
@@ -38,6 +49,7 @@ export const WorkerView = ({ telemetry, onCommand }) => {
 
     const update = (key, val) => {
         const numVal = parseFloat(val);
+        markInteracting();
         onCommand({ [key]: numVal });
         // Immediate local update for responsive UI
         if (key === 'cl2_valve') setCl2(numVal);
@@ -188,8 +200,19 @@ export const OwnerView = ({ telemetry, onCommand }) => {
     const [discharge, setDischarge] = useState(0);
     const [heating, setHeating] = useState(0);
 
-    // Sync values from telemetry (only when specific values change)
+    // Debounce: suppress telemetry sync while user is interacting
+    const userInteracting = React.useRef(false);
+    const interactTimer = React.useRef(null);
+
+    const markInteracting = () => {
+        userInteracting.current = true;
+        if (interactTimer.current) clearTimeout(interactTimer.current);
+        interactTimer.current = setTimeout(() => { userInteracting.current = false; }, 2000);
+    };
+
+    // Sync values from telemetry (only when NOT actively interacting)
     useEffect(() => {
+        if (userInteracting.current) return; // Skip sync while user is dragging
         if (telemetry?.initial_phenol_g !== undefined && telemetry.initial_phenol_g !== batchSizeG) setBatchSizeG(telemetry.initial_phenol_g);
         if (telemetry?.reaction_temp_c !== undefined && telemetry.reaction_temp_c !== reactionTemp) setReactionTemp(telemetry.reaction_temp_c);
         if (telemetry?.cl2_flow_lph !== undefined && telemetry.cl2_flow_lph !== cl2Flow) setCl2Flow(telemetry.cl2_flow_lph);
@@ -208,6 +231,7 @@ export const OwnerView = ({ telemetry, onCommand }) => {
 
     const update = (key, val) => {
         const numVal = parseFloat(val);
+        markInteracting();
         onCommand({ [key]: numVal });
         if (key === 'cl2_valve') setCl2(numVal);
         if (key === 'agitator_rpm') setRpm(numVal);

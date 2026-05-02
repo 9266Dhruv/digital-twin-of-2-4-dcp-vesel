@@ -98,6 +98,17 @@ class GodModeReactor:
         self.batch_record_mgr = BatchRecordManager()
         self.batch_id = ""
         
+        # Manual override tracking — when user sends manual command,
+        # protect that actuator from PID/auto overrides for OVERRIDE_COOLDOWN ticks
+        self.OVERRIDE_COOLDOWN = 50   # 50 ticks × 0.1s = 5 seconds
+        self.manual_override = {
+            "heating_power": 0,
+            "cooling_valve": 0,
+            "cl2_valve": 0,
+            "agitator_rpm": 0,
+            "discharge_valve": 0,
+        }
+        
         # Timing
         self.tick_count = 0
         self.golden_batch_profile = [40 + 20 * math.sin(i / 10) for i in range(3600)]
@@ -228,15 +239,20 @@ class GodModeReactor:
                     data_logger.end_batch()
                     self.batch_active = False
         
+        # Decrement manual override cooldowns
+        for key in self.manual_override:
+            if self.manual_override[key] > 0:
+                self.manual_override[key] -= 1
+        
         # 2. DETERMINE TARGET TEMPERATURE
         if recipe_target:
             target_temp = recipe_target.get('target_temp', self.reaction_temp_c)
             
-            # Apply auto-actions from recipe
+            # Apply auto-actions from recipe (only if NOT manually overridden)
             auto_actions = recipe_target.get('auto_actions', {})
-            if 'heating_power' in auto_actions:
+            if 'heating_power' in auto_actions and self.manual_override['heating_power'] == 0:
                 self.heating_power = auto_actions['heating_power']
-            if 'cl2_valve' in auto_actions and not self.faults['valve_stuck']:
+            if 'cl2_valve' in auto_actions and not self.faults['valve_stuck'] and self.manual_override['cl2_valve'] == 0:
                 # Only auto-set Cl2 valve if interlock allows
                 ok, msg = self.check_interlocks('cl2_valve', auto_actions['cl2_valve'])
                 if ok:
@@ -271,14 +287,19 @@ class GodModeReactor:
         control_output = self.pid_temp.update(self.temp, target_temp, dt)
         
         # Basic control logic: adjust heating/cooling based on PID output
+        # ONLY if those actuators are NOT under manual override
         if control_output > 0:
             # Need heating
-            self.heating_power = min(100, self.heating_power + control_output * 0.5)
-            self.cooling_valve = max(20, self.cooling_valve - control_output * 0.3)
+            if self.manual_override['heating_power'] == 0:
+                self.heating_power = min(100, self.heating_power + control_output * 0.5)
+            if self.manual_override['cooling_valve'] == 0:
+                self.cooling_valve = max(20, self.cooling_valve - control_output * 0.3)
         else:
             # Need cooling
-            self.heating_power = max(0, self.heating_power + control_output * 0.5)
-            self.cooling_valve = min(100, self.cooling_valve - control_output * 0.3)
+            if self.manual_override['heating_power'] == 0:
+                self.heating_power = max(0, self.heating_power + control_output * 0.5)
+            if self.manual_override['cooling_valve'] == 0:
+                self.cooling_valve = min(100, self.cooling_valve - control_output * 0.3)
         
         # 5. CHEMICAL KINETICS — Arrhenius ODE via Soft Sensor
         mixing_efficiency = min(1.0, self.agitator_rpm / 300.0)
@@ -357,8 +378,22 @@ class GodModeReactor:
         # 11. PURITY — from soft sensor (replaces hardcoded)
         self.purity = self._soft_sensor_data.get("dcp_purity", 0.0)
         
-        # 12. FINANCIAL VALUE — DCP value minus TCP waste penalty
-        self.batch_value = (self.conc_dcp * 150.0) - (self.conc_phenol * 10.0) - (self.conc_cl2 * 5.0) - (self.conc_tcp * 80.0)
+        # 12. FINANCIAL VALUE — net batch profit
+        # Revenue: DCP produced (mol/L × volume × MW × price/g)
+        #   DCP MW = 163 g/mol, market ~$4.50/g for lab-grade 2,4-DCP
+        dcp_mass_g = self.conc_dcp * self.reactor_volume_L * 163.0
+        dcp_revenue = dcp_mass_g * 4.50
+        # Cost: phenol consumed (initial - remaining) × MW × cost/g
+        #   Phenol MW = 94.11 g/mol, cost ~$0.15/g industrial
+        phenol_consumed_mol = max(0, self.initial_conc_phenol - self.conc_phenol)
+        phenol_cost = phenol_consumed_mol * self.reactor_volume_L * 94.11 * 0.15
+        # Cl2 cost: consumed Cl2 is roughly stoichiometric
+        cl2_cost = phenol_consumed_mol * 2 * self.reactor_volume_L * 70.9 * 0.05
+        # TCP waste penalty (disposal + lost selectivity)
+        tcp_mass_g = self.conc_tcp * self.reactor_volume_L * 197.45
+        tcp_penalty = tcp_mass_g * 2.0
+        # Net batch value
+        self.batch_value = dcp_revenue - phenol_cost - cl2_cost - tcp_penalty
         
         # 12b. BATCH RECORD — sample PVs periodically (every ~1 second)
         if self.tick_count % 10 == 0 and self.batch_record_mgr.current_record:
@@ -418,6 +453,7 @@ class GodModeReactor:
             ok, msg = self.check_interlocks("cl2_valve", value)
             if ok and not self.faults['valve_stuck']:
                 self.cl2_valve = value
+                self.manual_override['cl2_valve'] = self.OVERRIDE_COOLDOWN
                 data_logger.log_control_action("cl2_valve", value)
             else:
                 self.interlock_msg = msg
@@ -426,12 +462,14 @@ class GodModeReactor:
         # Agitator RPM
         if 'agitator_rpm' in cmd:
             self.agitator_rpm = float(cmd['agitator_rpm'])
+            self.manual_override['agitator_rpm'] = self.OVERRIDE_COOLDOWN
             data_logger.log_control_action("agitator_rpm", self.agitator_rpm)
             self.log_event("INFO", f"Agitator RPM set to {self.agitator_rpm}")
         
         # Cooling valve
         if 'cooling_valve' in cmd:
             self.cooling_valve = float(cmd['cooling_valve'])
+            self.manual_override['cooling_valve'] = self.OVERRIDE_COOLDOWN
             data_logger.log_control_action("cooling_valve", self.cooling_valve)
             self.log_event("INFO", f"Cooling valve set to {self.cooling_valve}%")
         
@@ -441,6 +479,7 @@ class GodModeReactor:
             ok, msg = self.check_interlocks("discharge_valve", value)
             if ok:
                 self.discharge_valve = value
+                self.manual_override['discharge_valve'] = self.OVERRIDE_COOLDOWN
                 data_logger.log_control_action("discharge_valve", value)
             else:
                 self.interlock_msg = msg
@@ -461,6 +500,13 @@ class GodModeReactor:
         if 'optimize_mode' in cmd:
             self.optimization_mode = cmd['optimize_mode']
             self.log_event("INFO", f"Optimization mode: {self.optimization_mode}")
+        
+        # Heating power (manual override)
+        if 'heating_power' in cmd:
+            self.heating_power = float(cmd['heating_power'])
+            self.manual_override['heating_power'] = self.OVERRIDE_COOLDOWN
+            data_logger.log_control_action("heating_power", self.heating_power)
+            self.log_event("INFO", f"Heating power set to {self.heating_power}%")
         
         # Batch size
         if 'initial_phenol_g' in cmd:

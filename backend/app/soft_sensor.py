@@ -150,7 +150,8 @@ class DCPSoftSensor:
         )
 
         if total_chlorinated < 1e-9:
-            dcp_purity = 0.0
+            # No reaction yet — system is pure (no impurities present)
+            dcp_purity = 100.0
             tcp_impurity = 0.0
         else:
             dcp_purity = (C["dcp_2_4"] / total_chlorinated) * 100.0
